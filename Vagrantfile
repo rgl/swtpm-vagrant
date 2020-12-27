@@ -11,5 +11,6 @@ Vagrant.configure('2') do |config|
     end
 
     config.vm.provision :shell, path: 'provision-base.sh'
+    config.vm.provision :shell, path: 'build-swtpm.sh'
     config.vm.provision :shell, path: 'provision-swtpm.sh'
 end
