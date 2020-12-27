@@ -8,7 +8,7 @@ libtpms_ref='v0.7.3'
 
 # see https://github.com/stefanberger/swtpm/releases
 swtpm_url='https://github.com/stefanberger/swtpm.git'
-swtpm_ref='v0.4.0'
+swtpm_ref='v0.5.2'
 
 mkdir -p ~/code && cd ~/code
 libtpms_path="$PWD/$(echo $(basename $libtpms_url) | sed -E 's,\.git,,g')"
