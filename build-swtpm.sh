@@ -51,3 +51,6 @@ mk-build-deps \
 dpkg-buildpackage -b -us -uc -j$(nproc)
 popd
 recreate-packages-repository
+
+# show the resulting packages.
+ls -laF $packages_path
