@@ -41,8 +41,8 @@ iso_path=/vagrant/tmp/$(basename $iso_url)
 if [[ ! -f $iso_path ]]; then
     mkdir -p $(dirname $iso_path)
     wget -qO $iso_path $iso_url
-    7z x $iso_path live/vmlinuz live/initrd.img
 fi
+7z x -y $iso_path live/vmlinuz live/initrd.img
 cat <<'EOF'
 switch to root:
 
