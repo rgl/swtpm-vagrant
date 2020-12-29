@@ -13,7 +13,7 @@ swtpm_ref='v0.5.2'
 mkdir -p ~/code && cd ~/code
 libtpms_path="$PWD/$(echo $(basename $libtpms_url) | sed -E 's,\.git,,g')"
 swtpm_path="$PWD/$(echo $(basename $swtpm_url) | sed -E 's,\.git,,g')"
-packages_path="/opt/local-apt-packages"
+packages_path='/opt/apt/repo.d/swtpm'
 
 # install dependencies.
 apt-get -y install build-essential fakeroot devscripts equivs dpkg-dev
@@ -22,7 +22,7 @@ function recreate-packages-repository {
     rm -rf $packages_path && mkdir -p $packages_path
     cp $libtpms_path/../*.deb $packages_path
     (cd $packages_path && dpkg-scanpackages . >Packages)
-    echo "deb [trusted=yes] file:$packages_path ./" >/etc/apt/sources.list.d/local-apt-packages.list
+    echo "deb [trusted=yes] file:$packages_path ./" >/etc/apt/sources.list.d/swtpm.list
     apt-get update
 }
 
@@ -51,6 +51,16 @@ mk-build-deps \
 dpkg-buildpackage -b -us -uc -j$(nproc)
 popd
 recreate-packages-repository
+
+# package the packages.
+tar czf swtpm-packages.tgz  -C $packages_path --xform 's,^\./,,' .
+tar tf swtpm-packages.tgz
+sha256sum swtpm-packages.tgz
+
+# copy the generated packages to the host.
+if [ -d /vagrant/tmp ]; then
+    cp swtpm-packages.tgz /vagrant/tmp
+fi
 
 # show the resulting packages.
 ls -laF $packages_path
