@@ -37,3 +37,11 @@ swtpm --version
 Install the swtpm packages as described above.
 
 Configure your `Vagrantfile` to [automatically create an emulated TPM for the VM](https://github.com/vagrant-libvirt/vagrant-libvirt#tpm-devices).
+
+# References
+
+* [Trusted Platform Module (Wikipedia)](https://en.wikipedia.org/wiki/Trusted_Platform_Module)
+* [Trusted Platform Module (Arch Linux)](https://wiki.archlinux.org/index.php/Trusted_Platform_Module)
+* [tpm-js (experiment with a software Trusted Platform Module (TPM) in your browser)](https://google.github.io/tpm-js/)
+* [QEMU TPM Device](https://www.qemu.org/docs/master/specs/tpm.html)
+* [The QEMU TPM emulator device](https://www.qemu.org/docs/master/specs/tpm.html#the-qemu-tpm-emulator-device)
