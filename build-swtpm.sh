@@ -53,13 +53,13 @@ popd
 recreate-packages-repository
 
 # package the packages.
-tar czf swtpm-packages.tgz  -C $packages_path --xform 's,^\./,,' .
-tar tf swtpm-packages.tgz
-sha256sum swtpm-packages.tgz
+tar czf /tmp/swtpm-packages.tgz -C $packages_path --xform 's,^\./,,' .
+tar tf /tmp/swtpm-packages.tgz
+sha256sum /tmp/swtpm-packages.tgz
 
 # copy the generated packages to the host.
 if [ -d /vagrant/tmp ]; then
-    cp swtpm-packages.tgz /vagrant/tmp
+    cp /tmp/swtpm-packages.tgz /vagrant/tmp
 fi
 
 # show the resulting packages.

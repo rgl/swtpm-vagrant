@@ -1,5 +1,7 @@
 # About
 
+[![Build status](https://github.com/rgl/swtpm-vagrant/workflows/build/badge.svg)](https://github.com/rgl/swtpm-vagrant/actions?query=workflow%3Abuild)
+
 This is a vagrant environment to play with [swtpm](https://github.com/stefanberger/swtpm) (a [Trusted Platform Module (TPM)](https://en.wikipedia.org/wiki/Trusted_Platform_Module) emulator) inside a qemu/kvm VM.
 
 # Usage
