@@ -12,7 +12,7 @@ export XDG_CONFIG_HOME=~/.config
 mkdir -p $XDG_CONFIG_HOME
 cat >$XDG_CONFIG_HOME/swtpm_setup.conf <<'EOF'
 # Program invoked for creating certificates
-create_certs_tool= /usr/share/swtpm/swtpm-localca
+create_certs_tool = /usr/share/swtpm/swtpm-localca
 create_certs_tool_config = ${XDG_CONFIG_HOME}/swtpm-localca.conf
 create_certs_tool_options = ${XDG_CONFIG_HOME}/swtpm-localca.options
 EOF
@@ -42,7 +42,7 @@ if [[ ! -f $iso_path ]]; then
     mkdir -p $(dirname $iso_path)
     wget -qO $iso_path $iso_url
 fi
-7z x -y $iso_path live/vmlinuz live/initrd.img
+7z x -y -w/root $iso_path live/vmlinuz live/initrd.img
 cat <<'EOF'
 switch to root:
 
