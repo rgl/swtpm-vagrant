@@ -74,7 +74,7 @@ run a vm with:
         -rtc base=utc \
         -chardev socket,id=devtpm0,path=${XDG_CONFIG_HOME}/mytpm1/swtpm-sock \
         -tpmdev emulator,id=tpm0,chardev=devtpm0 \
-        -device tpm-tis,tpmdev=tpm0
+        -device tpm-crb,tpmdev=tpm0
 
 **NB** type "ctrl-a h" to see the qemu emulator help
 **NB** type "ctrl-a x" to quit the qemu emulator
