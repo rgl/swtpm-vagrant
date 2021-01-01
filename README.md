@@ -30,7 +30,7 @@ sudo tar xf tmp/swtpm-packages.tgz -C $packages_path
 sudo bash -c "echo \"deb [trusted=yes] file:$packages_path ./\" >/etc/apt/sources.list.d/swtpm.list"
 sudo apt-get update
 sudo apt-get install -y swtpm swtpm-tools
-sudo install -d -o tss -g tss -m 700 /var/lib/swtpm-localca
+sudo install -d -o tss -g tss -m 755 /var/lib/swtpm-localca
 swtpm --version
 ```
 
