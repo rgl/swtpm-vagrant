@@ -6,6 +6,25 @@ This is a vagrant environment to play with [swtpm](https://github.com/stefanberg
 
 # Usage
 
+If you want to use the binary packages execute:
+
+```bash
+mkdir -p tmp
+wget -qO tmp/swtpm-packages.tgz https://github.com/rgl/swtpm-vagrant/releases/download/v0.0.20210101/swtpm-packages.tgz
+packages_path='/opt/apt/repo.d/swtpm'
+sudo rm -rf $packages_path && sudo install -d $packages_path
+sudo tar xf tmp/swtpm-packages.tgz -C $packages_path
+sudo bash -c "echo \"deb [trusted=yes] file:$packages_path ./\" >/etc/apt/sources.list.d/swtpm.list"
+sudo apt-get update
+sudo apt-get install -y swtpm swtpm-tools
+sudo install -d -o tss -g tss -m 755 /var/lib/swtpm-localca
+swtpm --version
+```
+
+If you want to build them yourself follow the next section.
+
+# Build
+
 Install the base [Ubuntu 20.04 base box](https://github.com/rgl/ubuntu-vagrant).
 
 Launch the environment:
@@ -21,18 +40,7 @@ play with its TPM.
 
 After `vagrant up` the packages are copied to the `tmp/swtpm-packages.tgz` host file.
 
-You can install them with:
-
-```bash
-packages_path='/opt/apt/repo.d/swtpm'
-sudo rm -rf $packages_path && sudo install -d $packages_path
-sudo tar xf tmp/swtpm-packages.tgz -C $packages_path
-sudo bash -c "echo \"deb [trusted=yes] file:$packages_path ./\" >/etc/apt/sources.list.d/swtpm.list"
-sudo apt-get update
-sudo apt-get install -y swtpm swtpm-tools
-sudo install -d -o tss -g tss -m 755 /var/lib/swtpm-localca
-swtpm --version
-```
+You can install them as described in the usage section (skip the download part).
 
 ## vagrant-libvirt
 
