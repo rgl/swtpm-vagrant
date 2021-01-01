@@ -4,6 +4,8 @@
 
 This is a vagrant environment to play with [swtpm](https://github.com/stefanberger/swtpm) (a [Trusted Platform Module (TPM)](https://en.wikipedia.org/wiki/Trusted_Platform_Module) emulator) inside a qemu/kvm VM.
 
+The swtpm binaries packages are used at [rgl/tpm-go-attestation-vagrant](https://github.com/rgl/tpm-go-attestation-vagrant).
+
 # Usage
 
 If you want to use the binary packages execute:
