@@ -12,7 +12,7 @@ If you want to use the binary packages execute:
 
 ```bash
 mkdir -p tmp
-wget -qO tmp/swtpm-packages.tgz https://github.com/rgl/swtpm-vagrant/releases/download/v0.0.20210101/swtpm-packages.tgz
+wget -qO tmp/swtpm-packages.tgz https://github.com/rgl/swtpm-vagrant/releases/download/v0.0.20211030/swtpm-packages.tgz
 packages_path='/opt/apt/repo.d/swtpm'
 sudo rm -rf $packages_path && sudo install -d $packages_path
 sudo tar xf tmp/swtpm-packages.tgz -C $packages_path
