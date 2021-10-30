@@ -4,11 +4,11 @@ export DEBIAN_FRONTEND=noninteractive
 
 # see https://github.com/stefanberger/libtpms/releases
 libtpms_url='https://github.com/stefanberger/libtpms.git'
-libtpms_ref='v0.7.3'
+libtpms_ref='v0.8.3'
 
 # see https://github.com/stefanberger/swtpm/releases
 swtpm_url='https://github.com/stefanberger/swtpm.git'
-swtpm_ref='v0.5.2'
+swtpm_ref='v0.6.1'
 
 mkdir -p ~/code && cd ~/code
 libtpms_path="$PWD/$(echo $(basename $libtpms_url) | sed -E 's,\.git,,g')"
