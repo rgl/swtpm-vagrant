@@ -58,7 +58,8 @@ tar tf /tmp/swtpm-packages.tgz
 sha256sum /tmp/swtpm-packages.tgz
 
 # copy the generated packages to the host.
-if [ -d /vagrant/tmp ]; then
+if [ -d /vagrant ]; then
+    mkdir -p /vagrant/tmp
     cp /tmp/swtpm-packages.tgz /vagrant/tmp
 fi
 
