@@ -36,14 +36,19 @@ swtpm_setup \
     --lock-nvram
 
 # download the iso to the shared storage.
-iso_url=https://github.com/rgl/debian-live-builder-vagrant/releases/download/v20200831/debian-live-20200831-amd64.iso
+iso_url=https://github.com/rgl/debian-live-builder-vagrant/releases/download/v20210714/debian-live-20210714-amd64.iso
 iso_path=/vagrant/tmp/$(basename $iso_url)
 if [[ ! -f $iso_path ]]; then
     mkdir -p $(dirname $iso_path)
     wget -qO $iso_path $iso_url
 fi
-7z x -y -w/root $iso_path live/vmlinuz live/initrd.img
-cat <<'EOF'
+cd ~
+7z x -y $iso_path live/vmlinuz live/initrd.img
+cat <<EOF
+ssh into the vagrant environment:
+
+    vagrant ssh
+
 switch to root:
 
     sudo -i
@@ -51,29 +56,29 @@ switch to root:
 start a swtpm instance in background with:
 
     export XDG_CONFIG_HOME=~/.config
-    swtpm \
-        socket \
-        --tpm2 \
-        --daemon \
-        --tpmstate dir=${XDG_CONFIG_HOME}/mytpm1 \
-        --ctrl type=unixio,path=${XDG_CONFIG_HOME}/mytpm1/swtpm-sock \
-        --log file=${XDG_CONFIG_HOME}/mytpm1.log,level=20
+    swtpm \\
+        socket \\
+        --tpm2 \\
+        --daemon \\
+        --tpmstate dir=\${XDG_CONFIG_HOME}/mytpm1 \\
+        --ctrl type=unixio,path=\${XDG_CONFIG_HOME}/mytpm1/swtpm-sock \\
+        --log file=\${XDG_CONFIG_HOME}/mytpm1.log,level=20
 
 run a vm with:
 
-    qemu-system-x86_64 \
-        -enable-kvm \
-        -nographic \
-        -cdrom $iso_path \
-        -kernel live/vmlinuz \
-        -initrd live/initrd.img \
-        -append 'boot=live components username=vagrant console=ttyS0' \
-        -net nic \
-        -net user \
-        -m 512 \
-        -rtc base=utc \
-        -chardev socket,id=devtpm0,path=${XDG_CONFIG_HOME}/mytpm1/swtpm-sock \
-        -tpmdev emulator,id=tpm0,chardev=devtpm0 \
+    qemu-system-x86_64 \\
+        -enable-kvm \\
+        -nographic \\
+        -cdrom $iso_path \\
+        -kernel live/vmlinuz \\
+        -initrd live/initrd.img \\
+        -append 'boot=live components username=vagrant console=ttyS0' \\
+        -net nic \\
+        -net user \\
+        -m 512 \\
+        -rtc base=utc \\
+        -chardev socket,id=devtpm0,path=\${XDG_CONFIG_HOME}/mytpm1/swtpm-sock \\
+        -tpmdev emulator,id=tpm0,chardev=devtpm0 \\
         -device tpm-crb,tpmdev=tpm0
 
 **NB** type "ctrl-a h" to see the qemu emulator help
@@ -91,15 +96,15 @@ test the tpm:
     sudo -i
 
     # get capabilities.
-    tpm2_getcap --capability properties-fixed
-    tpm2_getcap --capability properties-variable
-    tpm2_getcap --capability algorithms
-    tpm2_getcap --capability commands
-    tpm2_getcap --capability ecc-curves
+    tpm2_getcap properties-fixed
+    tpm2_getcap properties-variable
+    tpm2_getcap algorithms
+    tpm2_getcap commands
+    tpm2_getcap ecc-curves
 
     # list the pcrs and their values.
-    tpm2_pcrlist
+    tpm2_pcrread
 
     # get 16 bytes of random values.
-    tpm2_getrandom 16
+    echo "random: $(tpm2_getrandom --hex 16)"
 EOF
