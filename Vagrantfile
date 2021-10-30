@@ -3,7 +3,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.provider :libvirt do |lv, config|
     lv.memory = 1024
-    lv.cpus = 2
+    lv.cpus = 4
     lv.cpu_mode = 'host-passthrough'
     lv.nested = true
     lv.keymap = 'pt'
