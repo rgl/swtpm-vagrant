@@ -6,34 +6,17 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get install -y swtpm swtpm-tools
 swtpm --version
 
-# initialize a tpm.
+# initialize the swtpm localca and a tpm.
 # see man swtpm_setup
-export XDG_CONFIG_HOME=~/.config
-mkdir -p $XDG_CONFIG_HOME
-cat >$XDG_CONFIG_HOME/swtpm_setup.conf <<'EOF'
-# Program invoked for creating certificates
-create_certs_tool = /usr/share/swtpm/swtpm-localca
-create_certs_tool_config = ${XDG_CONFIG_HOME}/swtpm-localca.conf
-create_certs_tool_options = ${XDG_CONFIG_HOME}/swtpm-localca.options
-EOF
-cat >$XDG_CONFIG_HOME/swtpm-localca.conf <<'EOF'
-statedir = ${XDG_CONFIG_HOME}/var/lib/swtpm-localca
-signingkey = ${XDG_CONFIG_HOME}/var/lib/swtpm-localca/signkey.pem
-issuercert = ${XDG_CONFIG_HOME}/var/lib/swtpm-localca/issuercert.pem
-certserial = ${XDG_CONFIG_HOME}/var/lib/swtpm-localca/certserial
-EOF
-cat >$XDG_CONFIG_HOME/swtpm-localca.options <<'EOF'
---platform-manufacturer Ubuntu
---platform-model QEMU
---platform-version 4.2
-EOF
-mkdir -p ${XDG_CONFIG_HOME}/mytpm1
+TPMSTATE="$PWD/mytpm1"
+install -d "$TPMSTATE"
 swtpm_setup \
     --tpm2 \
-    --tpmstate ${XDG_CONFIG_HOME}/mytpm1 \
+    --tpmstate "$TPMSTATE" \
     --create-ek-cert \
     --create-platform-cert \
     --lock-nvram
+chown -R tss:tss /var/lib/swtpm-localca
 
 # download the iso to the shared storage.
 iso_url=https://github.com/rgl/debian-live-builder-vagrant/releases/download/v20210714/debian-live-20210714-amd64.iso
@@ -55,14 +38,15 @@ switch to root:
 
 start a swtpm instance in background with:
 
-    export XDG_CONFIG_HOME=~/.config
+    export TPMSTATE="\$PWD/mytpm1"
+    install -d "$TPMSTATE"
     swtpm \\
         socket \\
         --tpm2 \\
         --daemon \\
-        --tpmstate dir=\${XDG_CONFIG_HOME}/mytpm1 \\
-        --ctrl type=unixio,path=\${XDG_CONFIG_HOME}/mytpm1/swtpm-sock \\
-        --log file=\${XDG_CONFIG_HOME}/mytpm1.log,level=20
+        --tpmstate "dir=\${TPMSTATE}" \\
+        --ctrl "type=unixio,path=\${TPMSTATE}/swtpm-sock" \\
+        --log "file=\${TPMSTATE}/swtpm.log,level=20"
 
 run a vm with:
 
@@ -77,7 +61,7 @@ run a vm with:
         -net user \\
         -m 512 \\
         -rtc base=utc \\
-        -chardev socket,id=devtpm0,path=\${XDG_CONFIG_HOME}/mytpm1/swtpm-sock \\
+        -chardev "socket,id=devtpm0,path=\${TPMSTATE}/swtpm-sock" \\
         -tpmdev emulator,id=tpm0,chardev=devtpm0 \\
         -device tpm-crb,tpmdev=tpm0
 
