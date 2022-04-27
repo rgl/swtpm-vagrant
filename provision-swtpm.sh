@@ -106,5 +106,5 @@ test the tpm:
     tpm2_pcrread
 
     # get 16 bytes of random values.
-    echo "random: $(tpm2_getrandom --hex 16)"
+    echo "random: \$(tpm2_getrandom --hex 16)"
 EOF
