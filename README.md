@@ -11,16 +11,37 @@ The swtpm binaries packages are used at [rgl/tpm-go-attestation-vagrant](https:/
 If you want to use the binary packages execute:
 
 ```bash
+# enter a root shell.
+sudo -i
+
+# install the binaries.
 mkdir -p tmp
 wget -qO tmp/swtpm-packages.tgz https://github.com/rgl/swtpm-vagrant/releases/download/v0.0.20220427/swtpm-packages.tgz
 packages_path='/opt/apt/repo.d/swtpm'
-sudo rm -rf $packages_path && sudo install -d $packages_path
-sudo tar xf tmp/swtpm-packages.tgz -C $packages_path
-sudo bash -c "echo \"deb [trusted=yes] file:$packages_path ./\" >/etc/apt/sources.list.d/swtpm.list"
-sudo apt-get update
-sudo apt-get install -y swtpm swtpm-tools
-sudo install -d -o tss -g tss -m 755 /var/lib/swtpm-localca
-swtpm --version
+rm -rf $packages_path && install -d $packages_path
+tar xf tmp/swtpm-packages.tgz -C $packages_path
+bash -c "echo \"deb [trusted=yes] file:$packages_path ./\" >/etc/apt/sources.list.d/swtpm.list"
+apt-get update
+apt-get install -y swtpm swtpm-tools
+install -d -o tss -g tss -m 755 /var/lib/swtpm-localca
+
+# create the swtpm localca.
+# NB the localca is created as a side-effect of creating a dummy swtpm instance
+#    based on the configuration files at /etc/swtpm* (installed by the
+#    swtpm-tools package).
+TPMSTATE=tmp/tpmstate
+install -d "$TPMSTATE"
+swtpm_setup \
+    --tpm2 \
+    --tpmstate "$TPMSTATE" \
+    --create-ek-cert \
+    --create-platform-cert \
+    --lock-nvram
+chown -R tss:tss /var/lib/swtpm-localca
+rm -rf "$TPMSTATE"
+
+# exit the root shell.
+exit
 ```
 
 If you want to build them yourself follow the next section.
