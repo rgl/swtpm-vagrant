@@ -39,7 +39,7 @@ switch to root:
 start a swtpm instance in background with:
 
     export TPMSTATE="\$PWD/mytpm1"
-    install -d "$TPMSTATE"
+    install -d "\$TPMSTATE"
     swtpm \\
         socket \\
         --tpm2 \\
