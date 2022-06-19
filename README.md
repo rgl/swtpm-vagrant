@@ -16,7 +16,7 @@ sudo -i
 
 # install the binaries.
 mkdir -p tmp
-wget -qO tmp/swtpm-packages.tgz https://github.com/rgl/swtpm-vagrant/releases/download/v0.0.20220427/swtpm-packages.tgz
+wget -qO tmp/swtpm-packages.tgz https://github.com/rgl/swtpm-vagrant/releases/download/v0.0.20220619/swtpm-packages.tgz
 packages_path='/opt/apt/repo.d/swtpm'
 rm -rf $packages_path && install -d $packages_path
 tar xf tmp/swtpm-packages.tgz -C $packages_path
